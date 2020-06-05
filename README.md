@@ -1,5 +1,5 @@
 ## Welcome
-A React web app that integrates with the Google Maps API to find close by hospitals.
+A React web app that integrates with the Google Maps API to find close by hospitals Nigeria
 
 ## Setup
 - clone the app to your local PC

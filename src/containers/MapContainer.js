@@ -7,7 +7,9 @@ import ConstraintSlider from '../components/ConstraintSlider';
 
 import { Button, Input, Divider, message } from 'antd';
 
-const LDN_COOR = { lat: 51.507351, lng: -0.127758 };
+
+
+const NGR_COOR = { lat: 9.081999, lng: 8.675277 };
 
 class MapsContainer extends Component {
   constructor(props) {
@@ -19,7 +21,7 @@ class MapsContainer extends Component {
       markers: [],
       map: {},
       mapsApi: {},
-      londonLatLng: {},
+      nigeriaLatLng: {},
       autoCompleteService: {},
       placesService: {},
       geoCoderService: {},
@@ -27,7 +29,7 @@ class MapsContainer extends Component {
     };
   }
 
-  // Update name for constraint with index === key
+  
   updateConstraintName = ((event, key) => {
     event.preventDefault();
     const prevConstraints = this.state.constraints;
@@ -76,7 +78,7 @@ class MapsContainer extends Component {
       mapsLoaded: true,
       map,
       mapsApi,
-      londonLatLng: new mapsApi.LatLng(LDN_COOR.lat, LDN_COOR.lng),
+      nigeriaLatLng: new mapsApi.LatLng(NGR_COOR.lat, NGR_COOR.lng),
       autoCompleteService: new mapsApi.places.AutocompleteService(),
       placesService: new mapsApi.places.PlacesService(map),
       geoCoderService: new mapsApi.Geocoder(),
@@ -88,7 +90,7 @@ class MapsContainer extends Component {
   handleSearch = (() => {
     const { markers, constraints, placesService, directionService, mapsApi } = this.state;
     if (markers.length === 0) {
-      message.warn('The field must not be empty!');
+      message.warn('Please input name and address');
       return;
     }
     const filteredResults = [];
@@ -106,12 +108,12 @@ class MapsContainer extends Component {
 
     // First, search for hospital.
     placesService.textSearch(placesRequest, ((response) => {
-      // Only look at the nearest top 5.
-      const responseLimit = Math.min(5, response.length);
+      // Only look at the nearest top 10.
+      const responseLimit = Math.min(10, response.length);
       for (let i = 0; i < responseLimit; i++) {
         const hospital = response[i];
         const { rating, name } = hospital;
-        const address = hospital.formatted_address; // e.g 80 mandai Lake Rd,
+        const address = hospital.formatted_address; // e.g 80 mandai Lake Rd
         let photoUrl = '';
         let openNow = false;
         if (hospital.opening_hours) {
@@ -152,7 +154,7 @@ class MapsContainer extends Component {
   });
 
   render() {
-    const { constraints, mapsLoaded, londonLatLng, markers, searchResults } = this.state;
+    const { constraints, mapsLoaded, nigeriaLatLng, markers, searchResults } = this.state;
     const { autoCompleteService, geoCoderService } = this.state;
     return (
       <div className="w-100 d-flex py-4 flex-wrap justify-content-center">
@@ -170,7 +172,7 @@ class MapsContainer extends Component {
                       <MapAutoComplete
                         autoCompleteService={autoCompleteService}
                         geoCoderService={geoCoderService}
-                        londonLatLng={londonLatLng}
+                        nigeriaLatLng={nigeriaLatLng}
                         markerName={name}
                         addMarker={this.addMarker}
                       />
@@ -194,11 +196,11 @@ class MapsContainer extends Component {
         <section className="col-8 h-lg">
           <GoogleMapReact
             bootstrapURLKeys={{
-              key: 'AIzaSyAw-M9KNfcvQl5i5I3oEXxi7EoEe967UTI',
+              key: 'AIzaSyBR65Chs0aCYjyDWeXHH7waxboj3sgU9L0',
               libraries: ['places', 'directions']
             }}
             defaultZoom={11}
-            defaultCenter={{ lat: LDN_COOR.lat, lng: LDN_COOR.lng }}
+            defaultCenter={{ lat: NGR_COOR.lat, lng: NGR_COOR.lng }}
             yesIWantToUseGoogleMapApiInternals={true}
             onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
           >
@@ -221,7 +223,7 @@ class MapsContainer extends Component {
             <Divider />
             <section className="col-12">
               <div className="d-flex flex-column justify-content-center">
-                <h1 className="mb-4 fw-md">Closeby Hospitals </h1>
+                <h1 className="mb-4 fw-md"> Top 10 closest Hospitals </h1>
                 <div className="d-flex flex-wrap">
                   {searchResults.map((result, key) => (
                     <PlaceCard info={result} key={key} />

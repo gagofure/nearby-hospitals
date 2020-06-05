@@ -7,7 +7,7 @@ class MapAutoComplete extends Component {
     this.state = {
       suggestionts: [],
       dataSource: [],
-      londonLatLng: this.props.londonLatLng,
+      nigeriaLatLng: this.props.nigeriaLatLng,
       autoCompleteService: this.props.autoCompleteService,
       geoCoderService: this.props.geoCoderService,
     }
@@ -25,12 +25,12 @@ class MapAutoComplete extends Component {
 
   // Runs a search on the current value as the user types in the AutoComplete field.
   handleSearch = ((value) => {
-    const { autoCompleteService, londonLatLng } = this.state;
+    const { autoCompleteService, nigeriaLatLng } = this.state;
     // Search only if there is a string
     if (value.length > 0) {
       const searchQuery = {
         input: value,
-        location: londonLatLng, 
+        location: nigeriaLatLng, 
         radius: 30000, 
       };
       autoCompleteService.getQueryPredictions(searchQuery, ((response) => {
